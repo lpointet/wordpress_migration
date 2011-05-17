@@ -217,7 +217,6 @@ function do_update($sql) {
  * Fonction is_multisite()
  * -----
  * Détecte si l'installation WordPress est en multisite, grâce à la table wp_blogs.
- * TODO : Bugfix -> $_POST['prefix'] devrait être utilisé
  * -----
  * @return  bool        $retour                 installation multisite ?
  * -----
@@ -228,7 +227,7 @@ function is_multisite() {
     $rs = mysql_query('SHOW TABLES');
     $retour = FALSE;
     while($row = mysql_fetch_assoc($rs)) {
-        if(strpos($row['Tables_in_'.$_POST['base']], 'wp_blogs') !== FALSE) {
+        if(strpos($row['Tables_in_'.$_POST['base']], $_POST['prefix'].'blogs') !== FALSE) {
             $retour = TRUE;
             break;
         }
