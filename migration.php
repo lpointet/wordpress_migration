@@ -151,105 +151,115 @@ function is_multisite() {
 ?>
 <!DOCTYPE html>
 <html>
-    <head></head>
+    <head>
+        <title>Outil de migration pour base WordPress</title>
+
+        <link rel="stylesheet" href="style.css">
+    </head>
     <body>
-        <style>
-            html {
-                background-color:#ccc;
-            }
-            fieldset {
-                background-color:#57d;
-                box-shadow:#333 0 0 10px;
-                border-top-left-radius:15px;
-                border-bottom-right-radius:15px;
-                position:relative;
-                padding-top:30px;
-            }
-            legend {
-                padding:3px 10px;
-                background-color:#fff;
-                color:#57d;
-                font-weight:700;
-                border-radius:5px;
-                box-shadow:#333 5px 5px 5px;
-                position:absolute;
-                top:-25px;
-                left:10%;
-            }
-            input[type=text] {
-                width:500px;
-            }
-            label {
-                padding-right:5px;
-                font-weight:700;
-                color:#eee;
-            }
-        </style>
-        <?php
-        $message = array();
-        if(!empty($_POST)) {
-            mysql_connect('localhost', 'username', 'password');
-            if(mysql_select_db($_POST['base'])) {
-                mysql_query('SET NAMES UTF8');
-                clean();
+        <div id="header-container">
+            <header class="wrapper">
+                <h1 id="title">Outil de migration pour base WordPress</h1>
+            </header>
+        </div>
+        <div id="main" class="wrapper">
+            <?php
+            $message = array();
+            if(!empty($_POST)) {
+                mysql_connect('localhost', 'username', 'password');
+                if(mysql_select_db($_POST['base'])) {
+                    mysql_query('SET NAMES UTF8');
+                    clean();
 
-                $multisite = is_multisite();
+                    $multisite = is_multisite();
 
-                // Les options
-                update('options', array('option_id', 'option_value'), $message);
-                // Les posts
-                update('posts', array('ID', 'post_content'), $message);
-                update('posts', array('ID', 'guid'), $message);
-                // Les postmetas
-                update('postmeta', array('meta_id', 'meta_value'), $message);
-                // Les liens
-                if(!empty($_POST['link_update'])) {
-                    update('links', array('link_id', 'link_url'), $message);
-                    update('links', array('link_id', 'link_image'), $message);
+                    // Les options
+                    update('options', array('option_id', 'option_value'), $message);
+                    // Les posts
+                    update('posts', array('ID', 'post_content'), $message);
+                    update('posts', array('ID', 'guid'), $message);
+                    // Les postmetas
+                    update('postmeta', array('meta_id', 'meta_value'), $message);
+                    // Les liens
+                    if(!empty($_POST['link_update'])) {
+                        update('links', array('link_id', 'link_url'), $message);
+                        update('links', array('link_id', 'link_image'), $message);
+                    }
+
+                    // Le multisite
+                    if($multisite) {
+                        // Blogs
+                        update('blogs', array('blog_id', 'domain'), $message);
+                        update('blogs', array('blog_id', 'path'), $message);
+                        // Site
+                        update('site', array('id', 'domain'), $message);
+                        update('site', array('id', 'path'), $message);
+                        // Sitemetas
+                        update('sitemeta', array('meta_id', 'meta_value'), $message);
+                    }
+                    if(empty($message))
+                        $message['warning'][] = 'Migration effectuée !';
                 }
-
-                // Le multisite
-                if($multisite) {
-                    // Blogs
-                    update('blogs', array('blog_id', 'domain'), $message);
-                    update('blogs', array('blog_id', 'path'), $message);
-                    // Site
-                    update('site', array('id', 'domain'), $message);
-                    update('site', array('id', 'path'), $message);
-                    // Sitemetas
-                    update('sitemeta', array('meta_id', 'meta_value'), $message);
-                }
-                if(empty($message))
-                    $message['warning'][] = 'Migration effectuée !';
+                else
+                    $message['fatal'][] = 'La base '.$_POST['base'].' n\'existe pas !';
             }
-            else
-                $message['fatal'][] = 'La base '.$_POST['base'].' n\'existe pas !';
-        }
-        if(empty($_POST) || !empty($message)) {
-            if(!empty($message)) {
-                if(!empty($message['warning']))
-                    echo '<ul style="color:yellow;"><li>'.implode('</li><li>', $message['warning']).'</li></ul>';
-                if(!empty($message['fatal']))
-                    echo '<ul style="color:red;"><li>'.implode('</li><li>', $message['fatal']).'</li></ul>';
+            if(empty($_POST) || !empty($message)) {
+                if(!empty($message)) {
+                    if(!empty($message['warning']))
+                        echo '<ul style="color:yellow;"><li>'.implode('</li><li>', $message['warning']).'</li></ul>';
+                    if(!empty($message['fatal']))
+                        echo '<ul style="color:red;"><li>'.implode('</li><li>', $message['fatal']).'</li></ul>';
+                }
+                ?>
+                <form method="post" action="">
+                    <table>
+                        <tr>
+                            <td><label for="old_domain">Ancien domaine</label></td>
+                            <td><input type="text" name="old_domain" id="old_domain" autofocus /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="new_domain">Nouveau domaine</label></td>
+                            <td><input type="text" name="new_domain" id="new_domain" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="old_path">Ancien path</label></td>
+                            <td><input type="text" name="old_path" id="old_path" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="new_path">Nouveau path</label></td>
+                            <td><input type="text" name="new_path" id="new_path" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="old_filepath">Ancien path serveur</label></td>
+                            <td><input type="text" name="old_filepath" id="old_filepath" value="/usr/local/apache/htdocs/" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="new_filepath">Nouveau path serveur</label></td>
+                            <td><input type="text" name="new_filepath" id="new_filepath" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="base">Nom de la base</label></td>
+                            <td><input type="text" name="base" id="base" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="prefix">Préfixe des tables</label></td>
+                            <td><input type="text" name="prefix" id="prefix" value="wp_" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="link_update">Mettre à jour les liens</label></td>
+                            <td><input type="checkbox" name="link_update" id="link_update" value="1" checked /></td>
+                        </tr>
+                        <tr><td colspan="2"><input type="submit" value="Migrer !" /></td></tr>
+                    </table>
+                </form>
+                <?php
             }
             ?>
-            <form method="post" action="">
-                <fieldset>
-                    <legend>Configuration</legend>
-                    <p><label for="old_domain">Ancien domaine :</label><input type="text" name="old_domain" id="old_domain" /></p>
-                    <p><label for="new_domain">Nouveau domaine :</label><input type="text" name="new_domain" id="new_domain" /></p>
-                    <p><label for="old_path">Ancien path :</label><input type="text" name="old_path" id="old_path" /></p>
-                    <p><label for="new_path">Nouveau path :</label><input type="text" name="new_path" id="new_path" /></p>
-                    <p><label for="old_filepath">Ancien path serveur :</label><input type="text" name="old_filepath" id="old_filepath" value="/usr/local/apache/htdocs/" /></p>
-                    <p><label for="new_filepath">Nouveau path serveur :</label><input type="text" name="new_filepath" id="new_filepath" /></p>
-                    <p><label for="base">Nom de la base :</label><input type="text" name="base" id="base" /></p>
-                    <p><label for="prefix">Préfixe des tables :</label><input type="text" name="prefix" id="prefix" value="wp_" /></p>
-                    <p><label for="link_update">Mettre à jour les liens</label><input type="checkbox" name="link_update" id="link_update" value="1" checked /></p>
-                    <p><input type="submit" value="Migrer !" />
-                </fieldset>
-            </form>
-            <?php
-        }
-        ?>
+        </div>
+        <div id="footer-container">
+            <footer class="wrapper">
+                <p>Copyright GLOBALIS media systems 2011 - Lionel POINTET</p>
+            </footer>
+        </div>
     </body>
 </html>

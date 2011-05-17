@@ -1,0 +1,403 @@
+
+/* ==== Scroll down to find where to put your styles :) ==== */
+
+
+/* 	HTML5 Boilerplate
+
+	html5doctor.com Reset Stylesheet (Eric Meyer's Reset Reloaded + HTML5 baseline)
+	v1.4 2009-07-27 | Authors: Eric Meyer & Richard Clark
+*/
+
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+  margin:0;
+  padding:0;
+  border:0;
+  outline:0;
+  font-size:100%;
+  vertical-align:baseline;
+  background:transparent;
+}
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display:block;
+}
+nav ul { list-style:none; }
+blockquote, q { quotes:none; }
+blockquote:before, blockquote:after,
+q:before, q:after { content:''; content:none; }
+a { margin:0; padding:0; font-size:100%; vertical-align:baseline; background:transparent; }
+ins { background-color:#ff9; color:#000; text-decoration:none; }
+mark { background-color:#ff9; color:#000; font-style:italic; font-weight:bold; }
+del { text-decoration: line-through; }
+abbr[title], dfn[title] { border-bottom:1px dotted; cursor:help; }
+table { border-collapse:collapse; border-spacing:0; }
+hr { display:block; height:1px; border:0; border-top:1px solid #ccc; margin:1em 0; padding:0; }
+input, select { vertical-align:middle; }
+
+/* End of Reset CSS
+
+fonts.css from the YUI Library: developer.yahoo.com/yui/ */
+
+body { font:13px/1.231 sans-serif; *font-size:small; } /* hack retained to preserve specificity */
+select, input, textarea, button { font:99% sans-serif; }
+pre, code, kbd, samp { font-family: monospace, sans-serif; }
+
+
+/*
+ * HTML5 Boilerplate - minimal base styles
+ */
+
+body, select, input, textarea {
+  color: #444;
+  /* font-family: Georgia, serif;  */
+}
+h1,h2,h3,h4,h5,h6,strong,th { font-weight: 700; }
+html { overflow-y: scroll; }
+a:hover, a:active { outline: none; }
+a, a:active, a:visited { color: #607890; }
+a:hover { color: #036; }
+ul, ol { margin-left: 1.8em; }
+ol { list-style-type: decimal; }
+nav ul, nav li { margin: 0; }
+small { font-size: 85%; }
+td, td img { vertical-align: top; }
+sub { vertical-align: sub; font-size: smaller; }
+sup { vertical-align: super; font-size: smaller; }
+pre {
+  padding: 15px;
+  white-space: pre; /* CSS2 */
+  white-space: pre-wrap; /* CSS 2.1 */
+  white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */
+  word-wrap: break-word; /* IE */
+}
+textarea { overflow: auto; } /* thnx ivannikolic! www.sitepoint.com/blogs/2010/08/20/ie-remove-textarea-scrollbars/ */
+.ie6 legend, .ie7 legend { margin-left: -7px; } /* thnx ivannikolic! */
+input[type="radio"] { vertical-align: text-bottom; }
+input[type="checkbox"] { vertical-align: bottom; }
+.ie7 input[type="checkbox"] { vertical-align: baseline; }
+.ie6 input { vertical-align: text-bottom; }
+label, input[type=button], input[type=submit], button { cursor: pointer; }
+button, input, select, textarea { margin: 0; }
+input:valid, textarea:valid   {  }
+input:invalid, textarea:invalid {
+      border-radius: 1px;
+    -moz-box-shadow: 0px 0px 5px red;
+ -webkit-box-shadow: 0px 0px 5px red;
+         box-shadow: 0px 0px 5px red;
+}
+.no-boxshadow input:invalid,
+.no-boxshadow textarea:invalid { background-color: #f0dddd; }
+
+/* By default the selection color is pink */
+::-moz-selection{ background: #f16529; color:#fff; text-shadow: none; }
+::selection { background:#f16529; color:#fff; text-shadow: none; }
+a:link { -webkit-tap-highlight-color: #FF5E99; }
+button {  width: auto; overflow: visible; }
+.ie7 img { -ms-interpolation-mode: bicubic; }
+
+
+/*
+ * Non-semantic helper classes
+ */
+
+/* for image replacement */
+.ir { display: block; text-indent: -999em; overflow: hidden; background-repeat: no-repeat; text-align: left; direction: ltr; }
+
+/* Hide for both screenreaders and browsers */
+.hidden { display: none; visibility: hidden; }
+
+/* Hide only visually, but have it available for screenreaders */
+.visuallyhidden { position: absolute !important;
+  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+  clip: rect(1px, 1px, 1px, 1px); }
+
+/* Hide visually and from screenreaders, but maintain layout */
+.invisible { visibility: hidden; }
+
+/* Clearfix */
+.clearfix:before, .clearfix:after {
+  content: "\0020"; display: block; height: 0; visibility: hidden;
+}
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
+
+
+/*
+    // ========================================== \\
+   ||                                              ||
+   ||               Your styles !                  ||
+   ||                                              ||
+    \\ ========================================== //
+*/
+
+body{
+	font-family:Helvetica, Helvetica Neue, Arial, sans-serif;
+}
+
+.wrapper{
+	margin:auto;
+	width:960px;
+}
+
+#header-container{
+    background-color:#217196;
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #298CBA), color-stop(1, #217196));
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, #298CBA 0%, #217196 100%);
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, #298CBA 0%, #217196 100%);
+    /* Proposed W3C Markup */
+    background-image: linear-gradient(top, #298CBA 0%, #217196 100%);
+	height:130px;
+	border-bottom:20px solid #ddd;
+	margin-bottom:50px;
+	-webkit-box-shadow:0 0 40px #AAA;
+	   -moz-box-shadow:0 0 40px #AAA;
+	        box-shadow:0 0 40px #AAA;
+}
+
+h2, h3{
+	margin:30px 0;
+}
+
+#title, h2, h3{
+	font-weight:normal;
+}
+
+#title{
+	font-size: 50px;
+	color:#fff;
+	padding-top:35px;
+	float:left;
+}
+
+h2{
+	font-size: 45px;
+}
+
+h3{
+	font-size: 40px;
+}
+
+nav{
+	float:right;
+	margin-top:100px;
+}
+
+nav ul, nav ul li{
+	display:inline;
+}
+
+nav a{
+	padding:20px;
+	color:white;
+	text-decoration:none;
+	background-color:#e44d26;
+}
+
+aside{
+	color:white;
+	padding:20px;
+	float:right;
+	height:500px;
+	width:200px;
+	background-color:#f16529;
+	border-bottom:20px solid #e44d26;
+	margin-bottom:50px;
+	-webkit-box-shadow:0 0px 40px -10px #AAA;
+	   -moz-box-shadow:0 0px 40px -10px #AAA;
+	        box-shadow:0 0px 40px -10px #AAA;
+}
+
+body {
+    background-color:#f9f9f9;
+}
+
+#main p{
+	font:16px/26px Helvetica, Helvetica Neue, Arial;
+	width:620px;
+	text-shadow:none;
+}
+
+#main header h2{
+	padding-bottom:30px;
+}
+
+article header{
+	margin-bottom:50px;
+	padding-bottom:30px;
+	width:700px;
+	-webkit-box-shadow:0 45px 60px -60px #AAA;
+	   -moz-box-shadow:0 45px 60px -60px #AAA;
+	        box-shadow:0 45px 60px -60px #AAA;
+}
+
+
+#builder a{
+	display:block;
+	width:250px;
+	padding:20px;
+	text-align:center;
+	text-decoration:none;
+	font-size: 30px;
+	color:white;
+	margin-bottom:50px;
+	-webkit-box-shadow:0px 15px 20px -10px #AAA;
+	   -moz-box-shadow:0px 15px 20px -10px #AAA;
+	        box-shadow:0px 15px 20px -10px #AAA;
+	background-color:#bbb;
+	border-bottom:20px solid #aaa;
+	float:left;
+	margin-right:40px;
+}
+
+#builder a.selected{
+
+	background-color:#f16529;
+	border-bottom:20px solid #e44d26;
+}
+
+#builder #download{
+	font-size: 50px;
+	width:580px;
+	font-size: 74px;
+	float:none;
+	margin-top:40px;
+	height:110px;
+	padding-top:40px;
+}
+
+#builder #download img{
+	float:right;
+	margin-right:10px;
+	position:relative;
+	bottom:10px;
+}
+
+#builder h3{
+	clear:both;
+}
+
+#builder section{
+	width:660px;
+	-webkit-box-shadow:0 45px 60px -60px #AAA;
+	   -moz-box-shadow:0 45px 60px -60px #AAA;
+	        box-shadow:0 45px 60px -60px #AAA;
+	        padding-bottom:0px;
+}
+
+
+#footer-container{
+    background-color:#217196;
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #217196), color-stop(1, #298CBA));
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, #217196 0%, #298CBA 100%);
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, #217196 0%, #298CBA 100%);
+    /* Proposed W3C Markup */
+    background-image: linear-gradient(top, #217196 0%, #298CBA 100%);
+	height:40px;
+	border-top:20px solid #ddd;
+	margin-top:50px;
+    padding-top:10px;
+	-webkit-box-shadow:0 0 40px #AAA;
+	   -moz-box-shadow:0 0 40px #AAA;
+	        box-shadow:0 0 40px #AAA;
+}
+
+#footer-container footer{
+	color:#fff;
+}
+
+.info{
+	position:absolute;
+	top:5px;
+	background-color:#fff;
+	padding:10px;
+}
+
+#jquery-test{
+	top:45px;
+}
+table {
+    width:100%;
+}
+textarea, input[type="text"], input[type="password"], input[type="file"], input[type="button"], input[type="reset"], select {
+    background-color: #fff;
+    border-color: #DFDFDF;
+    width:100%;
+}
+input.regular-text, #adduser .form-field input {
+    width: 25em;
+}
+textarea, input[type="text"], input[type="password"], input[type="file"], input[type="button"], input[type="submit"], input[type="reset"], select {
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+}
+input[type="text"], input[type="password"], textarea {
+    -moz-box-sizing: border-box;
+}
+p, ul, ol, blockquote, input, select {
+    font-size: 12px;
+}
+textarea, input, select {
+    margin: 1px;
+    padding: 3px;
+}
+label {
+    color: #222;
+    text-shadow: 0 1px 0 #fff;
+    font-weight: 400;
+    text-align:right;
+    width:100%;
+    display:inline-block;
+}
+form {
+    margin-right:270px;
+}
+form tr td:first-of-type {
+    padding-right:10px;
+}
+form tr {
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+    width: 200px;
+}
+input[type=submit] {
+    background-color:#217196;
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #298CBA), color-stop(1, #217196));
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, #298CBA 0%, #217196 100%);
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, #298CBA 0%, #217196 100%);
+    /* Proposed W3C Markup */
+    background-image: linear-gradient(top, #298CBA 0%, #217196 100%);
+    border-color: #13455b;
+    border-radius: 15px;
+    color: #fff;
+    font-weight: 700;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+    min-width:70px;
+    float:right;
+}
+input[type=submit]:hover {
+	-webkit-box-shadow:0 0 10px #AAA;
+	   -moz-box-shadow:0 0 10px #AAA;
+	        box-shadow:0 0 10px #AAA;
+}
