@@ -144,12 +144,23 @@ function update($table, $champ, &$message) {
  * Fonction clean()
  * -----
  * Supprime les caractères superflus des chaînes envoyées en POST.
- * TODO : trim()
  * -----
  * $Author: Lionel POINTET $
  * $Date: 2011/05/17 $
  */
-function clean() {   
+function clean() {
+    $champ = array(
+        'old_domain',
+        'new_domain',
+        'old_path',
+        'new_path',
+        'old_filepath',
+        'new_filepath',
+    );
+    // Enlever les espaces inutiles
+    foreach($champ as $c)
+        $_POST[$c] = trim($_POST[$c]);
+
     // Enlever le 'http://' des domaines s'il existe
     $_POST['old_domain'] = strpos($_POST['old_domain'], 'http://') === 0 ? substr($_POST['old_domain'], 7) : $_POST['old_domain'];
     $_POST['old_domain'] = strpos($_POST['old_domain'], 'https://') === 0 ? substr($_POST['old_domain'], 8) : $_POST['old_domain'];
