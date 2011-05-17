@@ -1,5 +1,5 @@
 <?php
-define('CFG_DEBUG', FALSE);
+require 'config.php';
 
 function is_serialized( $data ) {
 	// if it isn't a string, it isn't serialized
@@ -166,7 +166,7 @@ function is_multisite() {
             <?php
             $message = array();
             if(!empty($_POST)) {
-                mysql_connect('localhost', 'username', 'password');
+                mysql_connect(CFG_HOST, CFG_USER, CFG_PASS);
                 if(mysql_select_db($_POST['base'])) {
                     mysql_query('SET NAMES UTF8');
                     clean();
