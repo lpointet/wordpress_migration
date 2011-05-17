@@ -1,0 +1,17 @@
+Pré-requis
+------------
+Cet outil suppose que vous avez créé un site WordPress sur un serveur et que vous voulez le migrer sur un autre serveur (ou domaine, path, bref que l'URL change).
+Pour cela, vous avez :
+- copié les sources du site à sa nouvelle destination
+- dupliqué les données de la base WordPress sur le nouveau serveur (mysqldump puis import mysql par exemple)
+
+Installation
+------------
+- Placez le dossier contenant le projet sur le serveur cible.
+- Accédez au script migration.php à travers un navigateur web.
+- Entrez les configurations nécessaires (seul le nom de la base est requis pour le moment)
+- Laissez la magie agir !
+
+Important
+------------
+Pensez également à modifier le fichier wp-config.php pour mettre à jour le domaine et le path du nouveau site.
