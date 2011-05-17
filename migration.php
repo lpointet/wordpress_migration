@@ -1,5 +1,6 @@
 <?php
 require 'config.php';
+require 'lang.php';
 
 function is_serialized( $data ) {
 	// if it isn't a string, it isn't serialized
@@ -57,7 +58,7 @@ function replace_recursive($val) {
 
 function update($table, $champ, &$message) {
     if(!is_array($champ) || empty($champ))
-        $message['fatal'][] = 'Erreur lors de la migration de "'.$table.'".';
+        $message['fatal'][] = sprintf(STR_ERROR_FATAL_TABLE, $table);
     else {
         $table_name = $_POST['prefix'].$table;
         $id = $champ[0];
@@ -88,7 +89,7 @@ function update($table, $champ, &$message) {
                     $row[$value] = replace($row[$value]);
 
                 if(!do_update(sprintf($update, mysql_real_escape_string($row[$value]), $row[$id]))) {
-                    $message['fatal'][] = 'Une erreur s\'est produite lors de la mise à jour du champ : '.$id.' = '.$row[$id].', '.$value.' = '.$row[$value].' dans la table '.$table_name;
+                    $message['fatal'][] = sprintf(STR_ERROR_FATAL_CHAMP, $id, $row[$id], $value, $row[$value], $table_name);
                 }
             }
         }
@@ -152,14 +153,14 @@ function is_multisite() {
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Outil de migration pour base WordPress</title>
+        <title><?php echo STR_TITLE; ?></title>
 
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <div id="header-container">
             <header class="wrapper">
-                <h1 id="title">Outil de migration pour base WordPress</h1>
+                <h1 id="title"><?php echo STR_TITLE; ?></h1>
             </header>
         </div>
         <div id="main" class="wrapper">
@@ -198,10 +199,10 @@ function is_multisite() {
                         update('sitemeta', array('meta_id', 'meta_value'), $message);
                     }
                     if(empty($message))
-                        $message['warning'][] = 'Migration effectuée !';
+                        $message['warning'][] = STR_ERROR_WARNING_MIGRATION_DONE;
                 }
                 else
-                    $message['fatal'][] = 'La base '.$_POST['base'].' n\'existe pas !';
+                    $message['fatal'][] = sprintf(STR_ERROR_FATAL_BASE, $_POST['base']);
             }
             if(empty($_POST) || !empty($message)) {
                 if(!empty($message)) {
@@ -214,42 +215,42 @@ function is_multisite() {
                 <form method="post" action="">
                     <table>
                         <tr>
-                            <td><label for="old_domain">Ancien domaine</label></td>
+                            <td><label for="old_domain"><?php echo STR_LIBELLE_OLD_DOMAIN; ?></label></td>
                             <td><input type="text" name="old_domain" id="old_domain" autofocus /></td>
                         </tr>
                         <tr>
-                            <td><label for="new_domain">Nouveau domaine</label></td>
+                            <td><label for="new_domain"><?php echo STR_LIBELLE_NEW_DOMAIN; ?></label></td>
                             <td><input type="text" name="new_domain" id="new_domain" /></td>
                         </tr>
                         <tr>
-                            <td><label for="old_path">Ancien path</label></td>
+                            <td><label for="old_path"><?php echo STR_LIBELLE_OLD_PATH; ?></label></td>
                             <td><input type="text" name="old_path" id="old_path" /></td>
                         </tr>
                         <tr>
-                            <td><label for="new_path">Nouveau path</label></td>
+                            <td><label for="new_path"><?php echo STR_LIBELLE_NEW_PATH; ?></label></td>
                             <td><input type="text" name="new_path" id="new_path" /></td>
                         </tr>
                         <tr>
-                            <td><label for="old_filepath">Ancien path serveur</label></td>
+                            <td><label for="old_filepath"><?php echo STR_LIBELLE_OLD_FILEPATH; ?></label></td>
                             <td><input type="text" name="old_filepath" id="old_filepath" value="/usr/local/apache/htdocs/" /></td>
                         </tr>
                         <tr>
-                            <td><label for="new_filepath">Nouveau path serveur</label></td>
+                            <td><label for="new_filepath"><?php echo STR_LIBELLE_NEW_FILEPATH; ?></label></td>
                             <td><input type="text" name="new_filepath" id="new_filepath" /></td>
                         </tr>
                         <tr>
-                            <td><label for="base">Nom de la base</label></td>
+                            <td><label for="base"><?php echo STR_LIBELLE_BASE; ?></label></td>
                             <td><input type="text" name="base" id="base" /></td>
                         </tr>
                         <tr>
-                            <td><label for="prefix">Préfixe des tables</label></td>
+                            <td><label for="prefix"><?php echo STR_LIBELLE_PREFIX; ?></label></td>
                             <td><input type="text" name="prefix" id="prefix" value="wp_" /></td>
                         </tr>
                         <tr>
-                            <td><label for="link_update">Mettre à jour les liens</label></td>
+                            <td><label for="link_update"><?php echo STR_LIBELLE_LINK_UPDATE; ?></label></td>
                             <td><input type="checkbox" name="link_update" id="link_update" value="1" checked /></td>
                         </tr>
-                        <tr><td colspan="2"><input type="submit" value="Migrer !" /></td></tr>
+                        <tr><td colspan="2"><input type="submit" value="<?php echo STR_LIBELLE_SUBMIT; ?>" /></td></tr>
                     </table>
                 </form>
                 <?php
@@ -258,7 +259,7 @@ function is_multisite() {
         </div>
         <div id="footer-container">
             <footer class="wrapper">
-                <p>Copyright GLOBALIS media systems 2011 - Lionel POINTET</p>
+                <p><?php echo STR_FOOTER; ?></p>
             </footer>
         </div>
     </body>
