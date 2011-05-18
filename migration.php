@@ -51,6 +51,25 @@ require 'lib.php';
                         // Sitemetas
                         update('sitemeta', array('meta_id', 'meta_value'), $message);
                     }
+
+                    // Les plugins
+                    if(!empty($_POST['plugin'])) {
+                        // Pour tous les plugins cochés
+                        foreach($_POST['plugin'] as $name) {
+                            // On les connait ?
+                            if(!empty($known_plugin[$name]) && !empty($known_plugin[$name]['update'])) {
+                                // Il y a potentiellement plusieurs tables à mettre à jour, dans la clé 'update'
+                                foreach($known_plugin[$name]['update'] as $update) {
+                                    if(!empty($update['table']) && !empty($update['champ'])) {
+                                        // Il y a peut-être plusieurs mises à jour à faire sur cette table
+                                        foreach($update['champ'] as $champ)
+                                            update($update['table'], $champ, $message);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     if(empty($message))
                         $message['warning'][] = STR_ERROR_WARNING_MIGRATION_DONE;
                 }
@@ -102,6 +121,27 @@ require 'lib.php';
                         <tr>
                             <td><label for="link_update"><?php echo STR_LIBELLE_LINK_UPDATE; ?></label></td>
                             <td><input type="checkbox" name="link_update" id="link_update" value="1" checked /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <fieldset>
+                                    <legend><?php echo STR_LIBELLE_FIELDSET_PLUGIN; ?></legend>
+                                    <table>
+                                        <?php
+                                        $i = 0;
+                                        foreach($known_plugin as $name => $plugin) {
+                                            if(!empty($plugin['label'])) {
+                                                ?>
+                                                <td><label for="plugin_<?php echo $i; ?>"><?php echo $plugin['label']; ?></label></td>
+                                                <td><input type="checkbox" name="plugin[]" id="plugin_<?php echo $i; ?>" value="<?php echo $name; ?>" /></td>
+                                                <?php
+                                                ++$i;
+                                            }
+                                        }
+                                        ?>
+                                    </table>
+                                </fieldset>
+                            </td>
                         </tr>
                         <tr><td colspan="2"><input type="submit" value="<?php echo STR_LIBELLE_SUBMIT; ?>" /></td></tr>
                     </table>

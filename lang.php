@@ -24,6 +24,7 @@ define('STR_LIBELLE_BASE', 'Nom de la base');
 define('STR_LIBELLE_PREFIX', 'Préfixe des tables');
 define('STR_LIBELLE_LINK_UPDATE', 'Mettre à jour les liens');
 define('STR_LIBELLE_SUBMIT', 'Migrer !');
+define('STR_LIBELLE_FIELDSET_PLUGIN', 'Plugins actifs');
 
 //
 // Contenu
