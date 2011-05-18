@@ -51,6 +51,25 @@ require 'lib.php';
                         // Sitemetas
                         update('sitemeta', array('meta_id', 'meta_value'), $message);
                     }
+
+                    // Les plugins
+                    if(!empty($_POST['plugin'])) {
+                        // Pour tous les plugins cochés
+                        foreach($_POST['plugin'] as $name) {
+                            // On les connait ?
+                            if(!empty($known_plugin[$name]) && !empty($known_plugin[$name]['update'])) {
+                                // Il y a potentiellement plusieurs tables à mettre à jour, dans la clé 'update'
+                                foreach($known_plugin[$name]['update'] as $update) {
+                                    if(!empty($update['table']) && !empty($update['champ'])) {
+                                        // Il y a peut-être plusieurs mises à jour à faire sur cette table
+                                        foreach($update['champ'] as $champ)
+                                            update($update['table'], $champ, $message);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     if(empty($message))
                         $message['warning'][] = STR_ERROR_WARNING_MIGRATION_DONE;
                 }
