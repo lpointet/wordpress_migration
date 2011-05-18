@@ -15,3 +15,4 @@ Installation
 Important
 ------------
 Pensez également à modifier le fichier wp-config.php pour mettre à jour le domaine et le path du nouveau site.
+Supprimez le dossier une fois la migration effectuée : il pourrait apporter des failles de sécurité importantes à votre site !
