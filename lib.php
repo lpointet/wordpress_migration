@@ -224,14 +224,29 @@ function do_update($sql) {
  * $Date: 2011/05/17 $
  */
 function is_multisite() {
-    $rs = mysql_query('SHOW TABLES');
-    $retour = FALSE;
-    while($row = mysql_fetch_assoc($rs)) {
-        if(strpos($row['Tables_in_'.$_POST['base']], $_POST['prefix'].'blogs') !== FALSE) {
-            $retour = TRUE;
-            break;
-        }
+    return table_exists($_POST['prefix'].'blogs');
+}
+
+/*
+ * Fonction table_exists($nom)
+ * -----
+ * Détecte si une table existe dans l'installation
+ * -----
+ * @param  string   $nom                le nom de la table à trouver
+ * -----
+ * @return  bool                        la table existe ?
+ * -----
+ * $Author: Lionel POINTET $
+ * $Date: 2011/05/18 $
+ */
+function table_exists($nom) {
+    global $table;
+
+    if(empty($table)) {
+        $rs = mysql_query('SHOW TABLES');
+        while($row = mysql_fetch_assoc($rs))
+            $table[] = $row['Tables_in_'.$_POST['base']];
     }
 
-    return $retour;
+    return in_array($nom, $table);
 }
