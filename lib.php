@@ -2,11 +2,11 @@
 /*
  * Fonction is_serialized($data)
  * -----
- * Fonction WordPress de détection de valeur sérialisée
+ * Fonction WordPress de dï¿½tection de valeur sï¿½rialisï¿½e
  * -----
- * @param   mixed      $data                    valeur d'entrée
+ * @param   mixed      $data                    valeur d'entrï¿½e
  * -----
- * @return  bool                                valeur sérialisée ?
+ * @return  bool                                valeur sï¿½rialisï¿½e ?
  * -----
  * $Author: WordPress $
  */
@@ -44,11 +44,11 @@ function is_serialized( $data ) {
 /*
  * Fonction replace($string)
  * -----
- * Remplacement des valeurs dans une chaîne
+ * Remplacement des valeurs dans une chaï¿½ne
  * -----
- * @param   string      $string                 chaîne de caractères dans laquelle doivent être remplacées les valeurs
+ * @param   string      $string                 chaï¿½ne de caractï¿½res dans laquelle doivent ï¿½tre remplacï¿½es les valeurs
  * -----
- * @return  string      $retour                 la chaîne avec les nouvelles valeurs
+ * @return  string      $retour                 la chaï¿½ne avec les nouvelles valeurs
  * -----
  * $Author: Lionel POINTET $
  * $Date: 2011/05/17 $
@@ -56,7 +56,7 @@ function is_serialized( $data ) {
 function replace($string) {
     $retour = $string;
 
-    $retour = str_replace($_POST['old_domain'].(!empty($_POST['old_path'])?'/'.$_POST['old_path']:''), $_POST['new_domain'].(!empty($_POST['new_path'])?'/'.$_POST['new_path']:''), $retour);
+    $retour = str_replace($_POST['old_domain'].(!empty($_POST['old_path'])?'/'.$_POST['old_path']:''), $_POST['old_domain'].(!empty($_POST['new_path'])?'/'.$_POST['new_path']:''), $retour);
     $retour = str_replace($_POST['old_domain'], $_POST['new_domain'], $retour);
     if(!empty($_POST['old_path']))
         $retour = str_replace($_POST['old_path'], $_POST['new_path'], $retour);
@@ -68,9 +68,9 @@ function replace($string) {
 /*
  * Fonction replace_recursive($val)
  * -----
- * Fonction récursive de remplacement des valeurs. Appelle replace() lorsque la valeur n'est plus un tableau, s'appelle elle-même sinon
+ * Fonction rï¿½cursive de remplacement des valeurs. Appelle replace() lorsque la valeur n'est plus un tableau, s'appelle elle-mï¿½me sinon
  * -----
- * @param   mixed      $val                 la variable dans laquelle les valeurs doivent être remplacées
+ * @param   mixed      $val                 la variable dans laquelle les valeurs doivent ï¿½tre remplacï¿½es
  * -----
  * @return  mixed      $val                 la variable avec les nouvelles valeurs
  * -----
@@ -91,9 +91,9 @@ function replace_recursive($val) {
 /*
  * Fonction update($table, $champ, &$message)
  * -----
- * Récupère les valeurs d'une table et les met à jour ensuite. Fait appel à replace_recursive() et replace() pour le remplacement et à do_update() pour la mise à jour
+ * Rï¿½cupï¿½re les valeurs d'une table et les met ï¿½ jour ensuite. Fait appel ï¿½ replace_recursive() et replace() pour le remplacement et ï¿½ do_update() pour la mise ï¿½ jour
  * -----
- * @param   string      $table                  le nom de la table à mettre à jour
+ * @param   string      $table                  le nom de la table ï¿½ mettre ï¿½ jour
  * @param   array       $champ                  les champs utiles : 0 => id, 1 => value
  * @param   array       &$message               si une erreur survient, on remplit ce tableau
  * -----
@@ -143,7 +143,7 @@ function update($table, $champ, &$message) {
 /*
  * Fonction clean()
  * -----
- * Supprime les caractères superflus des chaînes envoyées en POST.
+ * Supprime les caractï¿½res superflus des chaï¿½nes envoyï¿½es en POST.
  * -----
  * $Author: Lionel POINTET $
  * $Date: 2011/05/17 $
@@ -194,11 +194,11 @@ function clean() {
 /*
  * Fonction do_update($sql)
  * -----
- * En mode debug, affiche la requête, sinon la joue pour mettre à jour la base
+ * En mode debug, affiche la requï¿½te, sinon la joue pour mettre ï¿½ jour la base
  * -----
- * @param   string      $sql                    la requête de mise à jour
+ * @param   string      $sql                    la requï¿½te de mise ï¿½ jour
  * -----
- * @return  bool        $retour                 tout s'est bien passé ?
+ * @return  bool        $retour                 tout s'est bien passï¿½ ?
  * -----
  * $Author: Lionel POINTET $
  * $Date: 2011/05/17 $
@@ -216,7 +216,7 @@ function do_update($sql) {
 /*
  * Fonction is_multisite()
  * -----
- * Détecte si l'installation WordPress est en multisite, grâce à la table wp_blogs.
+ * Dï¿½tecte si l'installation WordPress est en multisite, grï¿½ce ï¿½ la table wp_blogs.
  * -----
  * @return  bool        $retour                 installation multisite ?
  * -----
@@ -230,9 +230,9 @@ function is_multisite() {
 /*
  * Fonction table_exists($nom)
  * -----
- * Détecte si une table existe dans l'installation
+ * Dï¿½tecte si une table existe dans l'installation
  * -----
- * @param  string   $nom                le nom de la table à trouver
+ * @param  string   $nom                le nom de la table ï¿½ trouver
  * -----
  * @return  bool                        la table existe ?
  * -----
