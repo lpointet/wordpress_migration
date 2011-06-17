@@ -20,61 +20,67 @@ require 'lib.php';
             <?php
             $message = array();
             if(!empty($_POST)) {
-                mysql_connect(CFG_HOST, CFG_USER, CFG_PASS);
-                if(mysql_select_db($_POST['base'])) {
-                    mysql_query('SET NAMES UTF8');
-                    clean();
+                clean();
+                // Gestion des champs obligatoires
+                if(empty($_POST['old_domain'])) {
+                    $message['fatal'][] = sprintf(STR_ERROR_FATAL_REQUIRED_FIELD, STR_LIBELLE_OLD_DOMAIN);
+                }
+                else {
+                    mysql_connect(CFG_HOST, CFG_USER, CFG_PASS);
+                    if(mysql_select_db($_POST['base'])) {
+                        mysql_query('SET NAMES UTF8');
 
-                    $multisite = is_multisite();
+                        $multisite = is_multisite();
 
-                    // Les options
-                    update('options', array('option_id', 'option_value'), $message);
-                    // Les posts
-                    update('posts', array('ID', 'post_content'), $message);
-                    update('posts', array('ID', 'guid'), $message);
-                    // Les postmetas
-                    update('postmeta', array('meta_id', 'meta_value'), $message);
-                    // Les liens
-                    if(!empty($_POST['link_update'])) {
-                        update('links', array('link_id', 'link_url'), $message);
-                        update('links', array('link_id', 'link_image'), $message);
-                    }
+                        // Les options
+                        update('options', array('option_id', 'option_value'), $message);
+                        // Les posts
+                        update('posts', array('ID', 'post_content'), $message);
+                        update('posts', array('ID', 'guid'), $message);
+                        // Les postmetas
+                        update('postmeta', array('meta_id', 'meta_value'), $message);
+                        // Les liens
+                        if(!empty($_POST['link_update'])) {
+                            update('links', array('link_id', 'link_url'), $message);
+                            update('links', array('link_id', 'link_image'), $message);
+                        }
 
-                    // Le multisite
-                    if($multisite) {
-                        // Blogs
-                        update('blogs', array('blog_id', 'domain'), $message);
-                        update('blogs', array('blog_id', 'path'), $message);
-                        // Site
-                        update('site', array('id', 'domain'), $message);
-                        update('site', array('id', 'path'), $message);
-                        // Sitemetas
-                        update('sitemeta', array('meta_id', 'meta_value'), $message);
-                    }
+                        // Le multisite
+                        if($multisite) {
+                            // Blogs
+                            update('blogs', array('blog_id', 'domain'), $message);
+                            update('blogs', array('blog_id', 'path'), $message);
+                            // Site
+                            update('site', array('id', 'domain'), $message);
+                            update('site', array('id', 'path'), $message);
+                            // Sitemetas
+                            update('sitemeta', array('meta_id', 'meta_value'), $message);
+                        }
 
-                    // Les plugins
-                    if(!empty($_POST['plugin'])) {
-                        // Pour tous les plugins cochés
-                        foreach($_POST['plugin'] as $name) {
-                            // On les connait ?
-                            if(!empty($known_plugin[$name]) && !empty($known_plugin[$name]['update'])) {
-                                // Il y a potentiellement plusieurs tables à mettre à jour, dans la clé 'update'
-                                foreach($known_plugin[$name]['update'] as $update) {
-                                    if(!empty($update['table']) && !empty($update['champ'])) {
-                                        // Il y a peut-être plusieurs mises à jour à faire sur cette table
-                                        foreach($update['champ'] as $champ)
-                                            update($update['table'], $champ, $message);
+                        // Les plugins
+                        if(!empty($_POST['plugin'])) {
+                            // Pour tous les plugins cochés
+                            foreach($_POST['plugin'] as $name) {
+                                // On les connait ?
+                                if(!empty($known_plugin[$name]) && !empty($known_plugin[$name]['update'])) {
+                                    // Il y a potentiellement plusieurs tables à mettre à jour, dans la clé 'update'
+                                    foreach($known_plugin[$name]['update'] as $update) {
+                                        if(!empty($update['table']) && !empty($update['champ'])) {
+                                            // Il y a peut-être plusieurs mises à jour à faire sur cette table
+                                            foreach($update['champ'] as $champ)
+                                                update($update['table'], $champ, $message);
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    if(empty($message))
-                        $message['warning'][] = STR_ERROR_WARNING_MIGRATION_DONE;
+                        if(empty($message))
+                            $message['warning'][] = STR_ERROR_WARNING_MIGRATION_DONE;
+                    }
+                    else
+                        $message['fatal'][] = sprintf(STR_ERROR_FATAL_BASE, $_POST['base']);
                 }
-                else
-                    $message['fatal'][] = sprintf(STR_ERROR_FATAL_BASE, $_POST['base']);
             }
             if(empty($_POST) || !empty($message)) {
                 if(!empty($message)) {
@@ -87,7 +93,7 @@ require 'lib.php';
                 <form method="post" action="">
                     <table>
                         <tr>
-                            <td><label for="old_domain"><?php echo STR_LIBELLE_OLD_DOMAIN; ?></label></td>
+                            <td><label for="old_domain"><?php echo STR_LIBELLE_OLD_DOMAIN.STR_FORM_REQUIRE_SYMBOL; ?></label></td>
                             <td><input type="text" name="old_domain" id="old_domain" autofocus /></td>
                         </tr>
                         <tr>
@@ -145,6 +151,7 @@ require 'lib.php';
                         </tr>
                         <tr><td colspan="2"><input type="submit" value="<?php echo STR_LIBELLE_SUBMIT; ?>" /></td></tr>
                     </table>
+                    <p><?php echo STR_FORM_LEGEND; ?></p>
                 </form>
                 <?php
             }

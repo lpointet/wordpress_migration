@@ -25,6 +25,9 @@ define('STR_LIBELLE_PREFIX', 'Préfixe des tables');
 define('STR_LIBELLE_LINK_UPDATE', 'Mettre à jour les liens');
 define('STR_LIBELLE_SUBMIT', 'Migrer !');
 define('STR_LIBELLE_FIELDSET_PLUGIN', 'Plugins actifs');
+define('STR_FORM_REQUIRE_SYMBOL', '*');
+define('STR_FORM_LEGEND', '* Champs obligatoires');
+define('STR_ERROR_FATAL_REQUIRED_FIELD', 'Le champ &laquo;%s&raquo; est requis');
 
 //
 // Contenu
