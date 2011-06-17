@@ -57,26 +57,39 @@ function is_serialized( $data ) {
 function replace($string, $champ = NULL) {
     $retour = $string;
 
-    // Si on ne change pas de domaine => le nouveau est l'ancien (champ obligatoire)
-    if(empty($_POST['new_domain'])) {
-        $_POST['new_domain'] = $_POST['old_domain'];
+    // Domaine + path
+    $retour = str_replace($_POST['old_domain'].$_POST['old_path'], $_POST['new_domain'].$_POST['new_path'], $retour);
+
+    // Si l'ancien domaine est compris dans le nouveau
+    if($_POST['old_domain'] != $_POST['new_domain'] && strstr($_POST['new_domain'], $_POST['old_domain']) !== FALSE)
+        $retour = str_replace($_POST['new_domain'], $_POST['old_domain'], $retour);
+
+    // Domaine seul
+    $retour = str_replace($_POST['old_domain'], $_POST['new_domain'], $retour);
+
+    // Path seul
+    if(!empty($_POST['old_path'])) {
+        // Si l'ancien path est compris dans le nouveau
+        if($_POST['old_path'] != $_POST['new_path'] && strstr($_POST['new_path'], $_POST['old_path']) !== FALSE)
+            $retour = str_replace($_POST['new_path'], $_POST['old_path'], $retour);
+        $retour = str_replace($_POST['old_path'], $_POST['new_path'], $retour);
     }
 
-    $_POST['old_path'] = !empty($_POST['old_path']) ? '/'.$_POST['old_path'] : '';
-    $_POST['new_path'] = !empty($_POST['new_path']) ? '/'.$_POST['new_path'] : '';
-
-    $retour = str_replace($_POST['old_domain'].$_POST['old_path'], $_POST['new_domain'].$_POST['new_path'], $retour);
-    $retour = str_replace($_POST['old_domain'], $_POST['new_domain'], $retour);
-    if(!empty($_POST['old_path']))
-        $retour = str_replace($_POST['old_path'], $_POST['new_path'], $retour);
+    // Champs particuliers
     if($champ == 'domain')
         $retour = $_POST['new_domain'];
     if($champ == 'path')
-        $retour = !empty($_POST['old_path']) || !empty($_POST['new_path']) ? $_POST['new_path'] : $string;
+        $retour = !empty($_POST['old_path']) || !empty($_POST['new_path']) ? $_POST['new_path'].'/' : $string;
 
     // Changer le path serveur
-    if(!empty($_POST['new_filepath']))
+    if(!empty($_POST['new_filepath'])) {
+        // Si l'ancien path est compris dans l'ancien path serveur, on l'a remplacé tout à l'heure
+        if(!empty($_POST['old_path']) && strstr($_POST['old_filepath'], $_POST['old_path']) !== FALSE) {
+            $path_ko = str_replace($_POST['old_path'], $_POST['new_path'], $_POST['old_filepath']);
+            $retour = str_replace($path_ko, $_POST['old_filepath'], $retour);
+        }
         $retour = str_replace($_POST['old_filepath'], $_POST['new_filepath'], $retour);
+    }
 
     return $retour;
 }
@@ -216,6 +229,14 @@ function clean() {
 
     $l = strlen($_POST['new_filepath']) - 1;
     $_POST['new_filepath'] = strpos($_POST['new_filepath'], '/') == $l ? substr($_POST['new_filepath'], 0, $l) : $_POST['new_filepath'];
+
+    // Si on ne change pas de domaine => le nouveau est l'ancien (champ obligatoire)
+    if(empty($_POST['new_domain'])) {
+        $_POST['new_domain'] = $_POST['old_domain'];
+    }
+
+    $_POST['old_path'] = !empty($_POST['old_path']) ? '/'.$_POST['old_path'] : '';
+    $_POST['new_path'] = !empty($_POST['new_path']) ? '/'.$_POST['new_path'] : '';
 }
 
 /*
