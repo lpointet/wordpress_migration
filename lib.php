@@ -42,26 +42,42 @@ function is_serialized( $data ) {
 }
 
 /*
- * Fonction replace($string)
+ * Fonction replace($string, $champ)
  * -----
  * Remplacement des valeurs dans une cha�ne
  * -----
  * @param   string      $string                 cha�ne de caract�res dans laquelle doivent �tre remplac�es les valeurs
+ * @param   string      $champ                 si $champ vaut 'domain' ou 'path' => on ne fait pas tout
  * -----
  * @return  string      $retour                 la cha�ne avec les nouvelles valeurs
  * -----
  * $Author: Lionel POINTET $
  * $Date: 2011/05/17 $
  */
-function replace($string) {
+function replace($string, $champ = NULL) {
     $retour = $string;
 
-    $retour = str_replace($_POST['old_domain'].(!empty($_POST['old_path'])?'/'.$_POST['old_path']:''), $_POST['old_domain'].(!empty($_POST['new_path'])?'/'.$_POST['new_path']:''), $retour);
+    // Si on ne change pas de domaine => le nouveau est l'ancien (champ obligatoire)
+    if(empty($_POST['new_domain'])) {
+        $_POST['new_domain'] = $_POST['old_domain'];
+    }
+
+    $_POST['old_path'] = !empty($_POST['old_path']) ? '/'.$_POST['old_path'] : '';
+    $_POST['new_path'] = !empty($_POST['new_path']) ? '/'.$_POST['new_path'] : '';
+
+    $retour = str_replace($_POST['old_domain'].$_POST['old_path'], $_POST['new_domain'].$_POST['new_path'], $retour);
     $retour = str_replace($_POST['old_domain'], $_POST['new_domain'], $retour);
     if(!empty($_POST['old_path']))
         $retour = str_replace($_POST['old_path'], $_POST['new_path'], $retour);
+    if($champ == 'domain')
+        $retour = $_POST['new_domain'];
+    if($champ == 'path')
+        $retour = !empty($_POST['old_path']) || !empty($_POST['new_path']) ? $_POST['new_path'] : $string;
+
+    // Changer le path serveur
     if(!empty($_POST['new_filepath']))
         $retour = str_replace($_POST['old_filepath'], $_POST['new_filepath'], $retour);
+
     return $retour;
 }
 
@@ -123,14 +139,14 @@ function update($table, $champ, &$message) {
                         $row[$value] = replace_recursive($row[$value]);
                     }
                     else
-                        $row[$value] = replace($row[$value]);
+                        $row[$value] = replace($row[$value], $value);
                     $row[$value] = serialize($row[$value]);
                     // Pour des options comme wp_carousel...
                     if(defined('DOUBLE_SERIALIZE'))
                         $row[$value] = serialize($row[$value]);
                 }
                 else
-                    $row[$value] = replace($row[$value]);
+                    $row[$value] = replace($row[$value], $value);
 
                 if(!do_update(sprintf($update, mysql_real_escape_string($row[$value]), $row[$id]))) {
                     $message['fatal'][] = sprintf(STR_ERROR_FATAL_CHAMP, $id, $row[$id], $value, $row[$value], $table_name);
