@@ -116,14 +116,25 @@ function replace_recursive($val) {
  * $Author: Lionel POINTET $
  * $Date: 2011/05/17 $
  */
-function update($table, $champ, &$message) {
+function update($table, $champ, &$message, $blog = FALSE) {
+    global $blog_id;
+
     if(!is_array($champ) || empty($champ))
         $message['fatal'][] = sprintf(STR_ERROR_FATAL_TABLE, $table);
     else {
         $table_name = $_POST['prefix'].$table;
         $id = $champ[0];
         $value = $champ[1];
-        $sql = 'SELECT '.implode(', ', $champ).' FROM '.$table_name.' WHERE '.$value.' LIKE "%'.mysql_real_escape_string($_POST['old_domain']).'%" ';
+        $sql = 'SELECT '.implode(', ', $champ).' FROM '.$table_name.' WHERE ';
+        if($blog)
+            $sql.= 'blog_id = '.$blog_id.' ';
+        else {
+            if($value != 'path')
+                $sql.= $value.' ';
+            else
+                $sql.= 'domain ';
+            $sql.= 'LIKE "%'.mysql_real_escape_string($_POST['old_domain']).'%" ';
+        }
 
         if($rs = mysql_query($sql)) {
             $update = 'UPDATE '.$table_name.' SET '.$value.' = "%s" WHERE '.$id.' = "%d"';

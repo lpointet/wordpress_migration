@@ -31,6 +31,10 @@ require 'lib.php';
                         mysql_query('SET NAMES UTF8');
 
                         $multisite = is_multisite();
+                        
+                        $blog_id = 1;
+                        if(preg_match('/([0-9]+)_$/', $_POST['prefix'], $match))
+                            $blog_id = $match[1];
 
                         // Les options
                         update('options', array('option_id', 'option_value'), $message);
@@ -49,7 +53,7 @@ require 'lib.php';
                         if($multisite) {
                             // Blogs
                             update('blogs', array('blog_id', 'domain'), $message);
-                            update('blogs', array('blog_id', 'path'), $message);
+                            update('blogs', array('blog_id', 'path'), $message, TRUE);
                             // Site
                             update('site', array('id', 'domain'), $message);
                             update('site', array('id', 'path'), $message);
