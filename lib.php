@@ -107,12 +107,20 @@ function replace($string, $champ = NULL) {
  * $Date: 2011/05/17 $
  */
 function replace_recursive($val) {
+    $unset = array();
     if(is_array($val)) {
-        foreach($val as $k => $v)
-            $val[$k] = replace_recursive($v);
+        foreach($val as $k => $v) {
+            $new_k = replace($k);
+            if($new_k != $k)
+                $unset[] = $k;
+            $val[$new_k] = replace_recursive($v);
+        }
     }
     else
         $val = replace($val);
+
+    foreach($unset as $k)
+        unset($val[$k]);
 
     return $val;
 }
