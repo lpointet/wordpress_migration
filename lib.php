@@ -138,15 +138,21 @@ function update($table, $champ, &$message, $blog = FALSE) {
         $table_name = $_POST['prefix'].$table;
         $id = $champ[0];
         $value = $champ[1];
+        $sql_value = $value != 'path' ? $value : 'domain';
         $sql = 'SELECT '.implode(', ', $champ).' FROM '.$table_name.' WHERE ';
         if($blog)
             $sql.= 'blog_id = '.$blog_id.' ';
         else {
-            if($value != 'path')
-                $sql.= $value.' ';
-            else
-                $sql.= 'domain ';
+            $sql.= $sql_value.' ';
             $sql.= 'LIKE "%'.mysql_real_escape_string($_POST['old_domain']).'%" ';
+            if(!empty($_POST['old_path'])) {
+                $sql.= 'OR '.$sql_value.' ';
+                $sql.= 'LIKE "%'.mysql_real_escape_string($_POST['old_path']).'%" ';
+            }
+            if(!empty($_POST['old_filepath'])) {
+                $sql.= 'OR '.$sql_value.' ';
+                $sql.= 'LIKE "%'.mysql_real_escape_string($_POST['old_filepath']).'%" ';
+            }
         }
 
         if($rs = mysql_query($sql)) {
