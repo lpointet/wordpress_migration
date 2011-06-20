@@ -404,19 +404,17 @@ input[type=submit]:hover {
 }
 fieldset {
     background:#ddd;
-    position:relative;
     padding:20px 0;
     margin:20px 0;
 }
 legend {
-    position:absolute;
-    top:-31px;
-    left:12px;
     height:15px;
     line-height:15px;
     padding:3px 10px;
     background:#298CBA;
     color:#fff;
+    margin-left:12px;
+    font-weight:700;
 }
 fieldset, legend {
     border:1px solid #aaa;
