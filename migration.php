@@ -124,7 +124,7 @@ require 'lib.php';
                                         </tr>
                                         <tr>
                                             <td><label for="base"><?php echo STR_LIBELLE_BASE; ?></label></td>
-                                            <td><input type="text" name="base" id="base" /></td>
+                                            <td><input type="text" name="base" id="base" autofocus /></td>
                                         </tr>
                                     </table>
                                 </fieldset>
@@ -132,7 +132,7 @@ require 'lib.php';
                         </tr>
                         <tr>
                             <td><label for="old_domain"><?php echo STR_LIBELLE_OLD_DOMAIN.STR_FORM_REQUIRE_SYMBOL; ?></label></td>
-                            <td><input type="text" name="old_domain" id="old_domain" autofocus /></td>
+                            <td><input type="text" name="old_domain" id="old_domain" /></td>
                         </tr>
                         <tr>
                             <td><label for="new_domain"><?php echo STR_LIBELLE_NEW_DOMAIN; ?></label></td>
