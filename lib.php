@@ -165,8 +165,8 @@ function update($table, $champ, &$message, $blog = FALSE) {
 
         if($rs = mysql_query($sql)) {
             $update = 'UPDATE '.$table_name.' SET '.$value.' = "%s" WHERE '.$id.' = "%d"';
-            $double_serialize = FALSE;
             while($row = mysql_fetch_assoc($rs)) {
+                $double_serialize = FALSE;
                 if(is_serialized($row[$value])) {
                     $row[$value] = @unserialize($row[$value]);
                     // Pour des options comme wp_carousel...
