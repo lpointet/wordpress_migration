@@ -9,10 +9,10 @@ Installation
 ------------
 - Placez le dossier contenant le projet sur le serveur cible.
 - Accédez au script migration.php à travers un navigateur web.
-- Entrez les configurations nécessaires (seul le nom de la base est requis pour le moment)
+- Entrez les configurations nécessaires (seuls le nom de la base et l'ancien domaine sont requis)
 - Laissez la magie agir !
 
 Important
 ------------
-Pensez également à modifier le fichier wp-config.php pour mettre à jour le domaine et le path du nouveau site.
+Pensez également à modifier les fichiers wp-config.php et .htaccess pour mettre à jour le domaine et le path du nouveau site.
 Supprimez le dossier une fois la migration effectuée : il pourrait apporter des failles de sécurité importantes à votre site !
