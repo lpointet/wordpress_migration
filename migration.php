@@ -22,6 +22,9 @@ require 'lib.php';
             if(!empty($_POST)) {
                 clean();
                 // Gestion des champs obligatoires
+                if(empty($_POST['base'])) {
+                    $message['fatal'][] = sprintf(STR_ERROR_FATAL_REQUIRED_FIELD, STR_LIBELLE_BASE);
+                }
                 if(empty($_POST['old_domain'])) {
                     $message['fatal'][] = sprintf(STR_ERROR_FATAL_REQUIRED_FIELD, STR_LIBELLE_OLD_DOMAIN);
                 }
