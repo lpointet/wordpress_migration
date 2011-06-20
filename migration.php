@@ -55,8 +55,8 @@ require 'lib.php';
                             update('blogs', array('blog_id', 'domain'), $message);
                             update('blogs', array('blog_id', 'path'), $message, TRUE);
                             // Site
-                            update('site', array('id', 'domain'), $message);
                             update('site', array('id', 'path'), $message);
+                            update('site', array('id', 'domain'), $message);
                             // Sitemetas
                             update('sitemeta', array('meta_id', 'meta_value'), $message);
                         }
