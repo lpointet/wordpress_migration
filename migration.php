@@ -9,6 +9,7 @@ require 'lib.php';
         <title><?php echo STR_TITLE; ?></title>
 
         <link rel="stylesheet" href="style.css">
+        <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
     </head>
     <body>
         <div id="header-container">
