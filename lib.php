@@ -211,6 +211,9 @@ function clean() {
         'new_path',
         'old_filepath',
         'new_filepath',
+        'host',
+        'user',
+        'pass',
     );
     // Enlever les espaces inutiles
     foreach($champ as $c)

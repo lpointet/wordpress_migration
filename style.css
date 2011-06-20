@@ -366,9 +366,6 @@ label {
     width:100%;
     display:inline-block;
 }
-form {
-    margin-right:270px;
-}
 form tr td:first-of-type {
     padding-right:10px;
 }
@@ -400,4 +397,30 @@ input[type=submit]:hover {
 	-webkit-box-shadow:0 0 10px #AAA;
 	   -moz-box-shadow:0 0 10px #AAA;
 	        box-shadow:0 0 10px #AAA;
+}
+.legend {
+    font-style: italic;
+    padding-left:10px;
+}
+fieldset {
+    background:#ddd;
+    position:relative;
+    padding:20px 0;
+    margin:20px 0;
+}
+legend {
+    position:absolute;
+    top:-31px;
+    left:12px;
+    height:15px;
+    line-height:15px;
+    padding:3px 10px;
+    background:#298CBA;
+    color:#fff;
+}
+fieldset, legend {
+    border:1px solid #aaa;
+}
+form tr td.no-padding {
+    padding:0;
 }
