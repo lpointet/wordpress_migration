@@ -151,13 +151,14 @@ function update($table, $champ, &$message, $blog = FALSE) {
 
         if($rs = mysql_query($sql)) {
             $update = 'UPDATE '.$table_name.' SET '.$value.' = "%s" WHERE '.$id.' = "%d"';
+            $double_serialize = FALSE;
             while($row = mysql_fetch_assoc($rs)) {
                 if(is_serialized($row[$value])) {
                     $row[$value] = @unserialize($row[$value]);
                     // Pour des options comme wp_carousel...
                     if(is_serialized($row[$value])) {
                         $row[$value] = @unserialize($row[$value]);
-                        define('DOUBLE_SERIALIZE', TRUE);
+                        $double_serialize = TRUE;
                     }
                     if(is_array($row[$value])) {
                         $row[$value] = replace_recursive($row[$value]);
@@ -166,7 +167,7 @@ function update($table, $champ, &$message, $blog = FALSE) {
                         $row[$value] = replace($row[$value], $value);
                     $row[$value] = serialize($row[$value]);
                     // Pour des options comme wp_carousel...
-                    if(defined('DOUBLE_SERIALIZE'))
+                    if($double_serialize)
                         $row[$value] = serialize($row[$value]);
                 }
                 else
