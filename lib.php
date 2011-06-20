@@ -159,7 +159,7 @@ function update($table, $champ, &$message, $blog = FALSE) {
             }
             if(!empty($_POST['old_filepath'])) {
                 $sql.= 'OR '.$sql_value.' ';
-                $sql.= 'LIKE "%'.mysql_real_escape_string($_POST['old_filepath']).'%" ';
+                $sql.= 'LIKE "%'.str_replace('\\\\', '\\\\\\\\', mysql_real_escape_string($_POST['old_filepath'])).'%" ';
             }
         }
 
@@ -224,26 +224,26 @@ function clean() {
 
     // Enlever le '/' des domaines s'il existe
     $l = strlen($_POST['old_domain']) - 1;
-    $_POST['old_domain'] = strpos($_POST['old_domain'], '/') == $l ? substr($_POST['old_domain'], 0, $l) : $_POST['old_domain'];
+    $_POST['old_domain'] = strrpos($_POST['old_domain'], '/') == $l ? substr($_POST['old_domain'], 0, $l) : $_POST['old_domain'];
 
     $l = strlen($_POST['new_domain']) - 1;
-    $_POST['new_domain'] = strpos($_POST['new_domain'], '/') == $l ? substr($_POST['new_domain'], 0, $l) : $_POST['new_domain'];
+    $_POST['new_domain'] = strrpos($_POST['new_domain'], '/') == $l ? substr($_POST['new_domain'], 0, $l) : $_POST['new_domain'];
 
     // Enlever le '/' des paths s'il existe
     $_POST['old_path'] = strpos($_POST['old_path'], '/') === 0 ? substr($_POST['old_path'], 1) : $_POST['old_path'];
     $l = strlen($_POST['old_path']) - 1;
-    $_POST['old_path'] = strpos($_POST['old_path'], '/') == $l ? substr($_POST['old_path'], 0, $l) : $_POST['old_path'];
+    $_POST['old_path'] = strrpos($_POST['old_path'], '/') == $l ? substr($_POST['old_path'], 0, $l) : $_POST['old_path'];
 
     $_POST['new_path'] = strpos($_POST['new_path'], '/') === 0 ? substr($_POST['new_path'], 1) : $_POST['new_path'];
     $l = strlen($_POST['new_path']) - 1;
-    $_POST['new_path'] = strpos($_POST['new_path'], '/') == $l ? substr($_POST['new_path'], 0, $l) : $_POST['new_path'];
+    $_POST['new_path'] = strrpos($_POST['new_path'], '/') == $l ? substr($_POST['new_path'], 0, $l) : $_POST['new_path'];
 
     // Enlever le '/' des filepaths s'il existe
     $l = strlen($_POST['old_filepath']) - 1;
-    $_POST['old_filepath'] = strpos($_POST['old_filepath'], '/') == $l ? substr($_POST['old_filepath'], 0, $l) : $_POST['old_filepath'];
+    $_POST['old_filepath'] = strrpos($_POST['old_filepath'], '/') == $l || strrpos($_POST['old_filepath'], '\\') == $l  ? substr($_POST['old_filepath'], 0, $l) : $_POST['old_filepath'];
 
     $l = strlen($_POST['new_filepath']) - 1;
-    $_POST['new_filepath'] = strpos($_POST['new_filepath'], '/') == $l ? substr($_POST['new_filepath'], 0, $l) : $_POST['new_filepath'];
+    $_POST['new_filepath'] = strrpos($_POST['new_filepath'], '/') == $l || strrpos($_POST['new_filepath'], '\\') == $l ? substr($_POST['new_filepath'], 0, $l) : $_POST['new_filepath'];
 
     // Si on ne change pas de domaine => le nouveau est l'ancien (champ obligatoire)
     if(empty($_POST['new_domain'])) {
