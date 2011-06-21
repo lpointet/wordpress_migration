@@ -39,4 +39,4 @@ define('STR_LIBELLE_PASS', 'Mot de passe');
 // Contenu
 //
 define('STR_TITLE', 'Outil de migration pour base WordPress');
-define('STR_FOOTER', 'Outil créé par Lionel POINTET, GLOBALIS media systems - '.CFG_VERSION.' - '.CFG_VERSION_DATE);
+define('STR_FOOTER', 'Outil distribué sous license BSD. Copyright © Lionel POINTET - '.CFG_VERSION.' - '.CFG_VERSION_DATE);
