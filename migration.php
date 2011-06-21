@@ -127,7 +127,7 @@ require 'lib.php';
                                             <td class="legend"><?php echo sprintf(STR_LIBELLE_DEFAULT_VALUE, CFG_PASS); ?></td>
                                         </tr>
                                         <tr>
-                                            <td><label for="base"><?php echo STR_LIBELLE_BASE; ?></label></td>
+                                            <td><label for="base"><?php echo STR_LIBELLE_BASE.STR_FORM_REQUIRE_SYMBOL; ?></label></td>
                                             <td><input type="text" name="base" id="base" autofocus /></td>
                                         </tr>
                                     </table>
