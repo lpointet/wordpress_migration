@@ -25,7 +25,11 @@ $known_plugin = array(
                     ),
                     array(
                         'cf7_unit_id',
-                        'mail_2',                
+                        'mail_2',
+                    ),
+                    array(
+                        'cf7_unit_id',
+                        'form',
                     ),
                 ),
             ),
