@@ -32,7 +32,10 @@ require 'lib.php';
                 else {
                     $host = !empty($_POST['host']) ? $_POST['host'] : CFG_HOST;
                     $user = !empty($_POST['user']) ? $_POST['user'] : CFG_USER;
-                    $pass = !empty($_POST['pass']) ? $_POST['pass'] : CFG_PASS;
+                    if(!empty($_POST['empty_pass']))
+                        $pass = '';
+                    else
+                        $pass = !empty($_POST['pass']) ? $_POST['pass'] : CFG_PASS;
                     if(@mysql_connect($host, $user, $pass)) {
                         if(@mysql_select_db($_POST['base'])) {
                             mysql_query('SET NAMES UTF8');
@@ -123,7 +126,7 @@ require 'lib.php';
                                         </tr>
                                         <tr>
                                             <td><label for="pass"><?php echo STR_LIBELLE_PASS; ?></label></td>
-                                            <td><input type="password" name="pass" id="pass" /></td>
+                                            <td><input type="password" name="pass" id="pass" /><input type="checkbox" value="1" name="empty_pass" id="empty_pass" /><label class="inline" for="empty_pass">Cocher pour un mot de passe vide</label></td>
                                             <td class="legend"><?php echo sprintf(STR_LIBELLE_DEFAULT_VALUE, CFG_PASS); ?></td>
                                         </tr>
                                         <tr>

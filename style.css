@@ -366,6 +366,9 @@ label {
     width:100%;
     display:inline-block;
 }
+label.inline {
+    display:inline;
+}
 form tr td:first-of-type {
     padding-right:10px;
 }
