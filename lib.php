@@ -177,7 +177,7 @@ function update($table, $champ, &$message, $blog = FALSE) {
                     if(is_array($row[$value])) {
                         $row[$value] = replace_recursive($row[$value]);
                     }
-                    else if(is_object($row[$value])) {
+                    else if(is_object($row[$value]) || $row[$value] instanceof __PHP_Incomplete_Class) { // Étrange fonctionnement avec Google Sitemap...
                         $array_object = (array) $row[$value];
                         $array_object = replace_recursive($array_object);
                         foreach($array_object as $key => $value)
