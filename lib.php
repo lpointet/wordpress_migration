@@ -177,6 +177,12 @@ function update($table, $champ, &$message, $blog = FALSE) {
                     if(is_array($row[$value])) {
                         $row[$value] = replace_recursive($row[$value]);
                     }
+                    else if(is_object($row[$value])) {
+                        $array_object = (array) $row[$value];
+                        $array_object = replace_recursive($array_object);
+                        foreach($array_object as $key => $value)
+                            $row[$value]->$key = $value;
+                    }
                     else
                         $row[$value] = replace($row[$value], $value);
                     $row[$value] = serialize($row[$value]);
