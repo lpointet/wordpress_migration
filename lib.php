@@ -376,7 +376,7 @@ function get_cli_param() {
         'base' => ( !empty($params['b']) ? $params['b'] : NULL ),
         'pass' => ( !empty($params['pass']) ? $params['pass'] : NULL ),
         'empty_pass' => ( !empty($params['pass']) ? FALSE : TRUE ),
-        'link_update' => ( !empty($params['link_update']) ? $params['link_update'] : NULL ),
+        'link_update' => ( isset($params['l']) ? TRUE : FALSE ),
         'plugin' => ( !empty($params['plugins']) ? explode(CFG_PLUGIN_SEP, $params['plugins']) : NULL ),
         'prefix' => ( !empty($params['prefix']) ? $params['prefix'] : NULL ),
         'old_domain' => ( !empty($params['old_domain']) ? $params['old_domain'] : NULL ),
