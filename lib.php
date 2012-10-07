@@ -365,8 +365,7 @@ function get_cli_param() {
         'new_serv_path::', // New server path
     );
 
-    // $params = getopt($options);
-    $params = FALSE;
+    $params = getopt($options);
 
     if( !$params )
         return $params;
