@@ -40,3 +40,27 @@ define('STR_LIBELLE_PASS', 'Mot de passe');
 //
 define('STR_TITLE', 'Outil de migration pour base WordPress');
 define('STR_FOOTER', 'Outil distribué sous license BSD. Copyright © Lionel POINTET - '.CFG_VERSION.' - '.CFG_VERSION_DATE);
+
+//
+// CLI
+//
+define('STR_CLI_USAGE', "usage: php " . SCRIPT_NAME . " -h <host> -u <user> -b <db_name>" . PHP_EOL .
+                        "           " . str_repeat(" ", strlen(SCRIPT_NAME)) . " --old_domain=<old_domain> [<options>]" . PHP_EOL .
+                        PHP_EOL .
+                        "Options:" . PHP_EOL .
+                        "   -p <password>                     Use <password> to connect to database," . PHP_EOL .
+                        "                                       don't use password otherwise" . PHP_EOL .
+                        "   -l                                Update links" . PHP_EOL .
+                        "   --new_domain=<new_domain>         The new domain of installation" . PHP_EOL . 
+                        "                                       (if empty, don't move)" . PHP_EOL .
+                        "   --old_path=<old_path>             The old path of installation" . PHP_EOL .
+                        "                                       (http://<domain>/<path>)" . PHP_EOL .
+                        "   --new_path=<new_path>             The new path of installation" . PHP_EOL .
+                        "                                       (if empty & old_path too, don't move)" . PHP_EOL .
+                        "   --old_filepath=<old_filepath>     The old file path of installation" . PHP_EOL .
+                        "                                       (/var/www/)" . PHP_EOL .
+                        "   --new_filepath=<new_filepath>     The new file path of installation" . PHP_EOL .
+                        "                                       (if empty & old_filepath too, don't move)" . PHP_EOL .
+                        "   --prefix=<prefix>                 DB tables are prefixed with <prefix>" . PHP_EOL .
+                        "   --plugins=<plugins list>          Comma separated list of plugin slugs" . PHP_EOL .
+                        "");
