@@ -361,8 +361,8 @@ function get_cli_param() {
         'new_domain::', // New domain
         'old_path::', // Old path
         'new_path::', // New path
-        'old_serv_path::', // Old server path
-        'new_serv_path::', // New server path
+        'old_filepath::', // Old server path
+        'new_filepath::', // New server path
     );
 
     $params = getopt($options, $longopts);
@@ -383,7 +383,7 @@ function get_cli_param() {
         'new_domain' => ( !empty($params['new_domain']) ? $params['new_domain'] : NULL ),
         'old_path' => ( !empty($params['old_path']) ? $params['old_path'] : NULL ),
         'new_path' => ( !empty($params['new_path']) ? $params['new_path'] : NULL ),
-        'old_serv_path' => ( !empty($params['old_serv_path']) ? $params['old_serv_path'] : NULL ),
-        'new_serv_path' => ( !empty($params['new_serv_path']) ? $params['new_serv_path'] : NULL ),
+        'old_filepath' => ( !empty($params['old_filepath']) ? $params['old_filepath'] : NULL ),
+        'new_filepath' => ( !empty($params['new_filepath']) ? $params['new_filepath'] : NULL ),
     );
 }
