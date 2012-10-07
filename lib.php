@@ -55,40 +55,42 @@ function is_serialized( $data ) {
  * $Date: 2011/05/17 $
  */
 function replace($string, $champ = NULL) {
+    global $param;
+
     $retour = $string;
 
     // Domaine + path
-    $retour = str_replace($_POST['old_domain'].$_POST['old_path'], $_POST['new_domain'].$_POST['new_path'], $retour);
+    $retour = str_replace($param['old_domain'].$param['old_path'], $param['new_domain'].$param['new_path'], $retour);
 
     // Si l'ancien domaine est compris dans le nouveau
-    if($_POST['old_domain'] != $_POST['new_domain'] && strstr($_POST['new_domain'], $_POST['old_domain']) !== FALSE)
-        $retour = str_replace($_POST['new_domain'], $_POST['old_domain'], $retour);
+    if($param['old_domain'] != $param['new_domain'] && strstr($param['new_domain'], $param['old_domain']) !== FALSE)
+        $retour = str_replace($param['new_domain'], $param['old_domain'], $retour);
 
     // Domaine seul
-    $retour = str_replace($_POST['old_domain'], $_POST['new_domain'], $retour);
+    $retour = str_replace($param['old_domain'], $param['new_domain'], $retour);
 
     // Path seul
-    if(!empty($_POST['old_path'])) {
+    if(!empty($param['old_path'])) {
         // Si l'ancien path est compris dans le nouveau
-        if($_POST['old_path'] != $_POST['new_path'] && strstr($_POST['new_path'], $_POST['old_path']) !== FALSE)
-            $retour = str_replace($_POST['new_path'], $_POST['old_path'], $retour);
-        $retour = str_replace($_POST['old_path'], $_POST['new_path'], $retour);
+        if($param['old_path'] != $param['new_path'] && strstr($param['new_path'], $param['old_path']) !== FALSE)
+            $retour = str_replace($param['new_path'], $param['old_path'], $retour);
+        $retour = str_replace($param['old_path'], $param['new_path'], $retour);
     }
 
     // Champs particuliers
     if($champ == 'domain')
-        $retour = $_POST['new_domain'];
+        $retour = $param['new_domain'];
     if($champ == 'path')
-        $retour = !empty($_POST['old_path']) || !empty($_POST['new_path']) ? $_POST['new_path'].'/' : $string;
+        $retour = !empty($param['old_path']) || !empty($param['new_path']) ? $param['new_path'].'/' : $string;
 
     // Changer le path serveur
-    if(!empty($_POST['new_filepath'])) {
+    if(!empty($param['new_filepath'])) {
         // Si l'ancien path est compris dans l'ancien path serveur, on l'a remplacé tout à l'heure
-        if(!empty($_POST['old_path']) && strstr($_POST['old_filepath'], $_POST['old_path']) !== FALSE) {
-            $path_ko = str_replace($_POST['old_path'], $_POST['new_path'], $_POST['old_filepath']);
-            $retour = str_replace($path_ko, $_POST['old_filepath'], $retour);
+        if(!empty($param['old_path']) && strstr($param['old_filepath'], $param['old_path']) !== FALSE) {
+            $path_ko = str_replace($param['old_path'], $param['new_path'], $param['old_filepath']);
+            $retour = str_replace($path_ko, $param['old_filepath'], $retour);
         }
-        $retour = str_replace($_POST['old_filepath'], $_POST['new_filepath'], $retour);
+        $retour = str_replace($param['old_filepath'], $param['new_filepath'], $retour);
     }
 
     return $retour;
@@ -138,12 +140,12 @@ function replace_recursive($val) {
  * $Date: 2011/05/17 $
  */
 function update($table, $champ, &$message, $blog = FALSE) {
-    global $blog_id;
+    global $blog_id, $param;
 
     if(!is_array($champ) || empty($champ))
         $message['fatal'][] = sprintf(STR_ERROR_FATAL_TABLE, $table);
     else {
-        $table_name = $_POST['prefix'].$table;
+        $table_name = $param['prefix'].$table;
         $id = $champ[0];
         $value = $champ[1];
         $sql_value = $value != 'path' ? $value : 'domain';
@@ -152,14 +154,14 @@ function update($table, $champ, &$message, $blog = FALSE) {
             $sql.= 'blog_id = '.$blog_id.' ';
         else {
             $sql.= $sql_value.' ';
-            $sql.= 'LIKE "%'.mysql_real_escape_string($_POST['old_domain']).'%" ';
-            if(!empty($_POST['old_path'])) {
+            $sql.= 'LIKE "%'.mysql_real_escape_string($param['old_domain']).'%" ';
+            if(!empty($param['old_path'])) {
                 $sql.= 'OR '.$sql_value.' ';
-                $sql.= 'LIKE "%'.mysql_real_escape_string($_POST['old_path']).'%" ';
+                $sql.= 'LIKE "%'.mysql_real_escape_string($param['old_path']).'%" ';
             }
-            if(!empty($_POST['old_filepath'])) {
+            if(!empty($param['old_filepath'])) {
                 $sql.= 'OR '.$sql_value.' ';
-                $sql.= 'LIKE "%'.str_replace('\\\\', '\\\\\\\\', mysql_real_escape_string($_POST['old_filepath'])).'%" ';
+                $sql.= 'LIKE "%'.str_replace('\\\\', '\\\\\\\\', mysql_real_escape_string($param['old_filepath'])).'%" ';
             }
         }
 
@@ -210,6 +212,8 @@ function update($table, $champ, &$message, $blog = FALSE) {
  * $Date: 2011/05/17 $
  */
 function clean() {
+    global $param;
+
     $champ = array(
         'old_domain',
         'new_domain',
@@ -223,44 +227,44 @@ function clean() {
     );
     // Enlever les espaces inutiles
     foreach($champ as $c)
-        $_POST[$c] = trim($_POST[$c]);
+        $param[$c] = trim($param[$c]);
 
     // Enlever le 'http://' des domaines s'il existe
-    $_POST['old_domain'] = strpos($_POST['old_domain'], 'http://') === 0 ? substr($_POST['old_domain'], 7) : $_POST['old_domain'];
-    $_POST['old_domain'] = strpos($_POST['old_domain'], 'https://') === 0 ? substr($_POST['old_domain'], 8) : $_POST['old_domain'];
-    $_POST['new_domain'] = strpos($_POST['new_domain'], 'http://') === 0 ? substr($_POST['new_domain'], 7) : $_POST['new_domain'];
-    $_POST['new_domain'] = strpos($_POST['new_domain'], 'https://') === 0 ? substr($_POST['new_domain'], 8) : $_POST['new_domain'];
+    $param['old_domain'] = strpos($param['old_domain'], 'http://') === 0 ? substr($param['old_domain'], 7) : $param['old_domain'];
+    $param['old_domain'] = strpos($param['old_domain'], 'https://') === 0 ? substr($param['old_domain'], 8) : $param['old_domain'];
+    $param['new_domain'] = strpos($param['new_domain'], 'http://') === 0 ? substr($param['new_domain'], 7) : $param['new_domain'];
+    $param['new_domain'] = strpos($param['new_domain'], 'https://') === 0 ? substr($param['new_domain'], 8) : $param['new_domain'];
 
     // Enlever le '/' des domaines s'il existe
-    $l = strlen($_POST['old_domain']) - 1;
-    $_POST['old_domain'] = strrpos($_POST['old_domain'], '/') == $l ? substr($_POST['old_domain'], 0, $l) : $_POST['old_domain'];
+    $l = strlen($param['old_domain']) - 1;
+    $param['old_domain'] = strrpos($param['old_domain'], '/') == $l ? substr($param['old_domain'], 0, $l) : $param['old_domain'];
 
-    $l = strlen($_POST['new_domain']) - 1;
-    $_POST['new_domain'] = strrpos($_POST['new_domain'], '/') == $l ? substr($_POST['new_domain'], 0, $l) : $_POST['new_domain'];
+    $l = strlen($param['new_domain']) - 1;
+    $param['new_domain'] = strrpos($param['new_domain'], '/') == $l ? substr($param['new_domain'], 0, $l) : $param['new_domain'];
 
     // Enlever le '/' des paths s'il existe
-    $_POST['old_path'] = strpos($_POST['old_path'], '/') === 0 ? substr($_POST['old_path'], 1) : $_POST['old_path'];
-    $l = strlen($_POST['old_path']) - 1;
-    $_POST['old_path'] = strrpos($_POST['old_path'], '/') == $l ? substr($_POST['old_path'], 0, $l) : $_POST['old_path'];
+    $param['old_path'] = strpos($param['old_path'], '/') === 0 ? substr($param['old_path'], 1) : $param['old_path'];
+    $l = strlen($param['old_path']) - 1;
+    $param['old_path'] = strrpos($param['old_path'], '/') == $l ? substr($param['old_path'], 0, $l) : $param['old_path'];
 
-    $_POST['new_path'] = strpos($_POST['new_path'], '/') === 0 ? substr($_POST['new_path'], 1) : $_POST['new_path'];
-    $l = strlen($_POST['new_path']) - 1;
-    $_POST['new_path'] = strrpos($_POST['new_path'], '/') == $l ? substr($_POST['new_path'], 0, $l) : $_POST['new_path'];
+    $param['new_path'] = strpos($param['new_path'], '/') === 0 ? substr($param['new_path'], 1) : $param['new_path'];
+    $l = strlen($param['new_path']) - 1;
+    $param['new_path'] = strrpos($param['new_path'], '/') == $l ? substr($param['new_path'], 0, $l) : $param['new_path'];
 
     // Enlever le '/' des filepaths s'il existe
-    $l = strlen($_POST['old_filepath']) - 1;
-    $_POST['old_filepath'] = strrpos($_POST['old_filepath'], '/') == $l || strrpos($_POST['old_filepath'], '\\') == $l  ? substr($_POST['old_filepath'], 0, $l) : $_POST['old_filepath'];
+    $l = strlen($param['old_filepath']) - 1;
+    $param['old_filepath'] = strrpos($param['old_filepath'], '/') == $l || strrpos($param['old_filepath'], '\\') == $l  ? substr($param['old_filepath'], 0, $l) : $param['old_filepath'];
 
-    $l = strlen($_POST['new_filepath']) - 1;
-    $_POST['new_filepath'] = strrpos($_POST['new_filepath'], '/') == $l || strrpos($_POST['new_filepath'], '\\') == $l ? substr($_POST['new_filepath'], 0, $l) : $_POST['new_filepath'];
+    $l = strlen($param['new_filepath']) - 1;
+    $param['new_filepath'] = strrpos($param['new_filepath'], '/') == $l || strrpos($param['new_filepath'], '\\') == $l ? substr($param['new_filepath'], 0, $l) : $param['new_filepath'];
 
     // Si on ne change pas de domaine => le nouveau est l'ancien (champ obligatoire)
-    if(empty($_POST['new_domain'])) {
-        $_POST['new_domain'] = $_POST['old_domain'];
+    if(empty($param['new_domain'])) {
+        $param['new_domain'] = $param['old_domain'];
     }
 
-    $_POST['old_path'] = !empty($_POST['old_path']) ? '/'.$_POST['old_path'] : '';
-    $_POST['new_path'] = !empty($_POST['new_path']) ? '/'.$_POST['new_path'] : '';
+    $param['old_path'] = !empty($param['old_path']) ? '/'.$param['old_path'] : '';
+    $param['new_path'] = !empty($param['new_path']) ? '/'.$param['new_path'] : '';
 }
 
 /*
@@ -296,7 +300,9 @@ function do_update($sql) {
  * $Date: 2011/05/17 $
  */
 function is_multisite() {
-    return table_exists($_POST['prefix'].'blogs');
+    global $param;
+
+    return table_exists($param['prefix'].'blogs');
 }
 
 /*
@@ -312,13 +318,73 @@ function is_multisite() {
  * $Date: 2011/05/18 $
  */
 function table_exists($nom) {
-    global $table;
+    global $table, $param;
 
     if(empty($table)) {
         $rs = mysql_query('SHOW TABLES');
         while($row = mysql_fetch_assoc($rs))
-            $table[] = $row['Tables_in_'.$_POST['base']];
+            $table[] = $row['Tables_in_'.$param['base']];
     }
 
     return in_array($nom, $table);
+}
+
+/*
+ * Fonction get_cli_param()
+ * -----
+ * Retourne les paramètres passés en CLI sous forme de tableau associatif
+ * -----
+ * @return  array                        Les paramètres passés
+ * -----
+ * $Author: Lionel POINTET $
+ * $Date: 2012/10/05 $
+ */
+function get_cli_param() {
+    // Options requises
+    $options = 'h:'; // Host
+    $options.= 'u:'; // User
+    $options.= 'b:'; // Base
+
+    // Options facultatives
+    $options.= 'p::'; // Pass
+
+    // Options sans valeur
+    $options.= 'l'; // Link update
+
+    // Longues options
+    $longopts = array(
+        // Requises
+        'old_domain:', // Old domain
+        // Optionnelles
+        'prefix::', // Prefix
+        'plugins::', // Plugins
+        'new_domain::', // New domain
+        'old_path::', // Old path
+        'new_path::', // New path
+        'old_serv_path::', // Old server path
+        'new_serv_path::', // New server path
+    );
+
+    // $params = getopt($options);
+    $params = FALSE;
+
+    if( !$params )
+        return $params;
+
+    return array(
+        'host' => ( !empty($params['h']) ? $params['h'] : NULL ),
+        'user' => ( !empty($params['u']) ? $params['u'] : NULL ),
+        'base' => ( !empty($params['b']) ? $params['b'] : NULL ),
+        'pass' => ( !empty($params['pass']) ? $params['pass'] : NULL ),
+        'empty_pass' => ( !empty($params['pass']) ? FALSE : TRUE ),
+        'link_update' => ( !empty($params['link_update']) ? $params['link_update'] : NULL ),
+        'plugin' => ( !empty($params['plugins']) ? explode(CFG_PLUGIN_SEP, $params['plugins']) : NULL ),
+        'prefix' => ( !empty($params['prefix']) ? $params['prefix'] : NULL ),
+        'old_domain' => ( !empty($params['old_domain']) ? $params['old_domain'] : NULL ),
+        'new_domain' => ( !empty($params['new_domain']) ? $params['new_domain'] : NULL ),
+        'old_path' => ( !empty($params['old_path']) ? $params['old_path'] : NULL ),
+        'new_path' => ( !empty($params['new_path']) ? $params['new_path'] : NULL ),
+        'old_serv_path' => ( !empty($params['old_serv_path']) ? $params['old_serv_path'] : NULL ),
+        'new_serv_path' => ( !empty($params['new_serv_path']) ? $params['new_serv_path'] : NULL ),
+    );
 }
