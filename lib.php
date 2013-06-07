@@ -115,7 +115,7 @@ function replace_recursive($val) {
             $new_k = replace($k);
             if($new_k != $k)
                 $unset[] = $k;
-            $val[$new_k] = replace_recursive($v);
+            $val[$new_k] = try_replace( $val, $k );
         }
     }
     else
@@ -168,32 +168,7 @@ function update($table, $champ, &$message, $blog = FALSE) {
         if($rs = mysql_query($sql)) {
             $update = 'UPDATE '.$table_name.' SET '.$value.' = "%s" WHERE '.$id.' = "%d"';
             while($row = mysql_fetch_assoc($rs)) {
-                $double_serialize = FALSE;
-                if(is_serialized($row[$value])) {
-                    $row[$value] = @unserialize($row[$value]);
-                    // Pour des options comme wp_carousel...
-                    if(is_serialized($row[$value])) {
-                        $row[$value] = @unserialize($row[$value]);
-                        $double_serialize = TRUE;
-                    }
-                    if(is_array($row[$value])) {
-                        $row[$value] = replace_recursive($row[$value]);
-                    }
-                    else if(is_object($row[$value]) || $row[$value] instanceof __PHP_Incomplete_Class) { // Étrange fonctionnement avec Google Sitemap...
-                        $array_object = (array) $row[$value];
-                        $array_object = replace_recursive($array_object);
-                        foreach($array_object as $key => $value)
-                            $row[$value]->$key = $value;
-                    }
-                    else
-                        $row[$value] = replace($row[$value], $value);
-                    $row[$value] = serialize($row[$value]);
-                    // Pour des options comme wp_carousel...
-                    if($double_serialize)
-                        $row[$value] = serialize($row[$value]);
-                }
-                else
-                    $row[$value] = replace($row[$value], $value);
+                $row[$value] = try_replace( $row, $value );
 
                 if(!do_update(sprintf($update, mysql_real_escape_string($row[$value]), $row[$id]))) {
                     $message['fatal'][] = sprintf(STR_ERROR_FATAL_CHAMP, $id, $row[$id], $value, $row[$value], $table_name);
@@ -201,6 +176,48 @@ function update($table, $champ, &$message, $blog = FALSE) {
             }
         }
     }
+}
+
+/**
+ * Fonction try_replace($row, $value)
+ * -----
+ * Essaie de remplacer une valeur dans un tableau
+ * -----
+ * @param   array       $row                    le tableau
+ * @param   string      $value                  l'indice de la valeur à remplacer
+ * -----
+ * $Author: Lionel POINTET $
+ * $Date: 2013/06/07 $
+ */
+function try_replace( $row, $value ) {
+    if(is_serialized($row[$value])) {
+        $double_serialize = FALSE;
+        $row[$value] = @unserialize($row[$value]);
+        // Pour des options comme wp_carousel...
+        if(is_serialized($row[$value])) {
+            $row[$value] = @unserialize($row[$value]);
+            $double_serialize = TRUE;
+        }
+        if(is_array($row[$value])) {
+            $row[$value] = replace_recursive($row[$value]);
+        }
+        else if(is_object($row[$value]) || $row[$value] instanceof __PHP_Incomplete_Class) { // Étrange fonctionnement avec Google Sitemap...
+            $array_object = (array) $row[$value];
+            $array_object = replace_recursive($array_object);
+            foreach($array_object as $key => $value)
+                $row[$value]->$key = $value;
+        }
+        else
+            $row[$value] = replace($row[$value], $value);
+        $row[$value] = serialize($row[$value]);
+        // Pour des options comme wp_carousel...
+        if($double_serialize)
+            $row[$value] = serialize($row[$value]);
+    }
+    else
+        $row[$value] = replace($row[$value], $value);
+
+    return $row[$value];
 }
 
 /*
